@@ -46,4 +46,8 @@ public class EventCalendar {
         return DayType.WEEKDAY;
     }
 
+    public DayType checkVisitDate(int visitDate) {
+        LocalDate date = LocalDate.of(YEAR, MONTH, visitDate);
+        return eventCalendar.get(date);
+    }
 }
