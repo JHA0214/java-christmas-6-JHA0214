@@ -1,5 +1,7 @@
 package christmas.domain;
 
+import com.sun.tools.javac.Main;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,14 +12,26 @@ import java.util.Map;
  * 사용자의 주문을 받아, 총주문 금액을 계산한다.
  * */
 public class MenuManager {
-    private static final Map<String, Integer> FOOD_MENU = Map.of(
+    private int main = 0;
+    private int appetizer = 0;
+    private int dessert = 0;
+    private int drink = 0;
+
+    public MenuManager() {
+    }
+
+    private static final Map<String, Integer> APPETIZER_MENU = Map.of(
             "양송이수프", 6000,
             "타파스", 5500,
-            "시저샐러드", 8000,
+            "시저샐러드", 8000
+    );
+    private static final Map<String, Integer> MAIN_MENU = Map.of(
             "티본스테이크", 55000,
             "바비큐립", 54000,
             "해산물파스타", 35000,
-            "크리스마스파스타", 25000,
+            "크리스마스파스타", 25000
+    );
+    private static final Map<String, Integer> DESSERT_MENU = Map.of(
             "초코케이크", 15000,
             "아이스크림", 5000
     );
@@ -34,6 +48,8 @@ public class MenuManager {
         int price = 0;
         for (String menuName : menuNames) {
             price = getPrice(menuName);
+            if (price == 0)
+                return 0;
             quantity = orderList.get(menuName);
             total += price * quantity;
         }
@@ -41,8 +57,43 @@ public class MenuManager {
     }
 
     public int getPrice(String menuName) {
-        if (FOOD_MENU.containsKey(menuName))
-            return FOOD_MENU.get(menuName);
+        try {
+            validate(menuName);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return 0;
+        }
+        return ckeckMenu(menuName);
+    }
+    public void validate(String menuName) {
+        try {
+            ckeckMenu(menuName);
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        }
+    }
+
+    public int ckeckMenu(String menuName) {
+        if (MAIN_MENU.containsKey(menuName) || DRINKS_MENU.containsKey(menuName))
+            return getMainOrDrinkPrice(menuName);
+        return getAppetizerOrDessertPrice(menuName);
+    }
+
+    public int getMainOrDrinkPrice(String menuName) {
+        if (MAIN_MENU.containsKey(menuName)) {
+            main++;
+            return MAIN_MENU.get(menuName);
+        }
+        drink++;
         return DRINKS_MENU.get(menuName);
+    }
+
+    public int getAppetizerOrDessertPrice(String menuName) {
+        if (APPETIZER_MENU.containsKey(menuName)) {
+            appetizer++;
+            return APPETIZER_MENU.get(menuName);
+        }
+        dessert++;
+        return DESSERT_MENU.get(menuName);
     }
 }
