@@ -1,19 +1,14 @@
 package christmas.domain;
 
-import com.sun.tools.javac.Main;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /*
  * 각 메뉴들의 가격을 저장하고 있다.
  * 사용자의 주문을 받아, 총주문 금액을 계산한다.
  * */
 public class MenuManager {
-    private int main = 0;
     private int appetizer = 0;
+    private int main = 0;
     private int dessert = 0;
     private int drink = 0;
 
@@ -60,16 +55,17 @@ public class MenuManager {
         try {
             validate(menuName);
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage() + ErrorMessage.ORDER.getmessages());
             return 0;
         }
         return ckeckMenu(menuName);
     }
+
     public void validate(String menuName) {
         try {
             ckeckMenu(menuName);
         } catch (NullPointerException e) {
-            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+            throw new IllegalArgumentException(ErrorMessage.ERROR.getmessages());
         }
     }
 
@@ -95,5 +91,9 @@ public class MenuManager {
         }
         dessert++;
         return DESSERT_MENU.get(menuName);
+    }
+
+    public List<Integer> getOrderQuantity() {
+        return Arrays.asList(appetizer, main, dessert, drink);
     }
 }
