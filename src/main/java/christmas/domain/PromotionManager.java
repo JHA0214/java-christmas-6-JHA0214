@@ -65,14 +65,26 @@ public class PromotionManager {
         //증정 이벤트: 할인 전 총주문 금액이 12만 원 이상일 때, 샴페인 1개 증정
         if (totalOrderAmount < 120000)
             return 0;
+
         int discount = 25000;
         discountHistory.put("증정 이벤트", discount);
         return discount;
     }
-    public void printDiscounthistory() { //할인 내역서 출력
+
+    public void printDiscounthistory(int totalOrderAmount) { //할인 내역서 출력
+        if (totalOrderAmount < 10000) {
+            System.out.println("없음");
+            return;
+        }
         for (Map.Entry<String, Integer> discountEntry : discountHistory.entrySet()) {
             System.out.println(discountEntry.getKey() + ": " + discountEntry.getValue() + "원");
         }
+    }
+
+    public String checkChampagne() {
+        if (discountHistory.get("증정 이벤트") == 25000)
+            return "샴페인 1개";
+        return "없음";
     }
 
 }
