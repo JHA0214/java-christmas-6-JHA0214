@@ -1,20 +1,36 @@
 package christmas.domain;
 
-import java.awt.*;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /* ChristmasPromotion
  * 입력 받은 주문을 정리하여 저장한다.
- * 음료만 주문할 수 없다.
- * 메뉴는 한 번에 최대 20개까지만 주문이 가능하다.
  * 할인 내역과 총주문 금액 등 주문에 대한 데이터들을 저장한다.
- * 10000원 이상일 경우 할인 이벤트가 적용된다.
  * */
+enum FoodType {
+    APPETIZER, MAIN, DESSERT, DRINK
+}
+
 public class OrderManager {
     private Map<String, Integer> orderList = new LinkedHashMap<>();
+    private Map<FoodType, Integer> foodtypeQuantities = new LinkedHashMap<>();
+
     private int totalOrderAmount;
     private int totalDiscountAmount;
+    private String eventBadge = "";
+
+    public OrderManager() {
+    }
+
+    public void setOrderquantity(MenuManager menuManager) {
+        List<Integer> orderQuantity = menuManager.getOrderQuantity();
+        int orderQuantityNumber = 0;
+        for (FoodType type : FoodType.values()) {
+            foodtypeQuantities.put(type, orderQuantity.get(orderQuantityNumber));
+            orderQuantityNumber++;
+        }
+    }
 
     public void compileOrderList(String userOrder) {
         String[] orders = userOrder.split(",");
@@ -31,6 +47,26 @@ public class OrderManager {
     public void calculateOrderPrices(MenuManager menuManager) {
         int total = menuManager.calculateTotalOrderCost(orderList);
         totalOrderAmount = total;
+        setOrderquantity(menuManager);
     }
 
+    public void startDiscountProcess(PromotionManager promotionManager, DayType dayType, int visitDate) {
+        totalDiscountAmount += promotionManager.christmasDiscount(visitDate);
+        totalDiscountAmount += promotionManager.checkEligibleDiscounts(dayType, foodtypeQuantities);
+        totalDiscountAmount += promotionManager.champagneGift(totalOrderAmount);
+        if (totalDiscountAmount > 5000)
+            determineEventBadge();
+    }
+
+    public String determineEventBadge() {
+        if (totalDiscountAmount > 10000)
+            return treeOrSanta();
+        return "별";
+    }
+
+    public String treeOrSanta() {
+        if (totalDiscountAmount > 15000)
+            return "산타";
+        return "트리";
+    }
 }
