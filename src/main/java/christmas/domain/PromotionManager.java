@@ -71,20 +71,13 @@ public class PromotionManager {
         return discount;
     }
 
-    public void printDiscounthistory(int totalOrderAmount) { //할인 내역서 출력
-        if (totalOrderAmount < 10000) {
-            System.out.println("없음");
-            return;
-        }
-        for (Map.Entry<String, Integer> discountEntry : discountHistory.entrySet()) {
-            System.out.println(discountEntry.getKey() + ": " + discountEntry.getValue() + "원");
-        }
-    }
-
     public String checkChampagne() {
         if (discountHistory.get("증정 이벤트") == 25000)
             return "샴페인 1개";
         return "없음";
     }
 
+    public Map<String, Integer> getDiscountHistory() {
+        return discountHistory;
+    }
 }
