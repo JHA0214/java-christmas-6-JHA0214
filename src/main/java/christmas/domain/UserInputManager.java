@@ -61,7 +61,7 @@ public class UserInputManager {
                 return false;
             totalOrderQuantity += Integer.parseInt(parts[1]);
         }
-        if (!checkForDuplicateMenuItems(ordermenu) || !checkTotalOrderQuantity(totalOrderQuantity)) //총주문 수 확인, 중복 주문 확인
+        if (!checkForDuplicateMenuItems(ordermenu) || !checkTotalOrderQuantity(totalOrderQuantity)) //중복 주문 확인, 주문 수량 확인
             return false;
 
         return true;

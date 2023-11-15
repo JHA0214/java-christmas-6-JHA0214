@@ -18,7 +18,7 @@ public class PromotionManager {
         discountHistory.put("증정 이벤트", 0);
     }
 
-    public int checkEligibleDiscounts(DayType dayType, Map<FoodType, Integer> foodtypeQuantities) {
+    public int checkEligibleDiscounts(DayType dayType, Map<FoodType, Integer> foodtypeQuantities) { //방문날짜가 별, 주말, 평일 중 어떤 날인지 확인 후 할인혜택 적용
         if (dayType.equals(DayType.EVENTDAY))
             return specialDiscount();
         return checkWeekdayOrWeekendDiscount(dayType, foodtypeQuantities);
