@@ -4,6 +4,11 @@ import camp.nextstep.edu.missionutils.Console;
 
 import java.util.*;
 
+/* UserInputManager
+ * 사용자의 입력을 받는다.
+ * 입력값에 대한 예외처리를 진행한다.
+ * */
+
 enum ErrorMessage {
     ERROR("[ERROR]"),
     VISITDATE(" 유효하지 않은 날짜입니다. 다시 입력해 주세요."),

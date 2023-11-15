@@ -3,6 +3,11 @@ package christmas.domain;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/* PromotionManager
+ * 할인에 대한 계산을 한다.
+ * 적용된 할인혜택을 저장하고 있다.
+ * */
+
 public class PromotionManager {
     private Map<String, Integer> discountHistory = new LinkedHashMap<>();
 

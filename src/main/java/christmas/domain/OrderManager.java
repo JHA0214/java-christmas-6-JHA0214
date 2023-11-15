@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 /* OrderManager
- * 입력 받은 주문을 정리하여 저장한다.
- * 할인 내역과 총주문 금액 등 주문에 대한 데이터들을 저장한다.
+ * 주문에 관련된 정보를 저장하고 있다.
  * */
 
 enum FoodType {
@@ -14,26 +13,17 @@ enum FoodType {
 }
 
 public class OrderManager {
-    private Map<String, Integer> orderList = new LinkedHashMap<>();
-    private Map<FoodType, Integer> foodtypeQuantities = new LinkedHashMap<>();
+    private Map<String, Integer> orderList = new LinkedHashMap<>(); //메뉴별 주문수
+    private Map<FoodType, Integer> foodtypeQuantities = new LinkedHashMap<>(); //메뉴 종류별 주문수
 
-    private int totalOrderAmount;
-    private int totalDiscountAmount;
+    private int totalOrderAmount; //할인 전 총주문 금액
+    private int totalDiscountAmount; //총혜택 금액
     private String eventBadge = "없음";
 
     public OrderManager() {
     }
 
-    public void setOrderquantity(MenuManager menuManager) {
-        List<Integer> orderQuantity = menuManager.getOrderQuantity();
-        int orderQuantityNumber = 0;
-        for (FoodType type : FoodType.values()) {
-            foodtypeQuantities.put(type, orderQuantity.get(orderQuantityNumber));
-            orderQuantityNumber++;
-        }
-    }
-
-    public Map<String, Integer> compileOrderList(String userOrder) {
+    public Map<String, Integer> compileOrderList(String userOrder) { //입력받은 주문을 orderList에 메뉴이름과 주문수로 정리하여 저장한다.
         String[] orders = userOrder.split(",");
 
         for (String order : orders) {
@@ -46,17 +36,26 @@ public class OrderManager {
         return orderList;
     }
 
-    public void calculateOrderPrices(MenuManager menuManager) {
+    public void calculateOrderPrices(MenuManager menuManager) { //총주문 금액을 계산한다.
         int total = menuManager.calculateTotalOrderCost(orderList);
         totalOrderAmount = total;
         setOrderquantity(menuManager);
     }
 
-    public boolean checkEventEligibility() {
+    public void setOrderquantity(MenuManager menuManager) { //메뉴 종류별 주문수를 계산하여 저장한다.
+        List<Integer> orderQuantity = menuManager.getOrderQuantity();
+        int orderQuantityNumber = 0;
+        for (FoodType type : FoodType.values()) {
+            foodtypeQuantities.put(type, orderQuantity.get(orderQuantityNumber));
+            orderQuantityNumber++;
+        }
+    }
+
+    public boolean checkEventEligibility() { //총주문 금액이 이벤트 적용 조건인 10000원 이상인지 확인한다.
         return totalOrderAmount > 10000;
     }
 
-    public void startDiscountProcess(PromotionManager promotionManager, DayType dayType, int visitDate) {
+    public void startDiscountProcess(PromotionManager promotionManager, DayType dayType, int visitDate) { //할인혜택 적용
         totalDiscountAmount += promotionManager.christmasDiscount(visitDate);
         totalDiscountAmount += promotionManager.checkEligibleDiscounts(dayType, foodtypeQuantities);
         totalDiscountAmount += promotionManager.champagneGift(totalOrderAmount);

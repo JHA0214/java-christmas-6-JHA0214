@@ -2,6 +2,10 @@ package christmas.domain;
 
 import java.util.Map;
 
+/* PromotionView
+ * 주문에 대한 결과를 출력한다.
+ * */
+
 public class PromotionView {
     enum CheckoutMessages {
         ORDER_MENU("\n<주문 메뉴>"),

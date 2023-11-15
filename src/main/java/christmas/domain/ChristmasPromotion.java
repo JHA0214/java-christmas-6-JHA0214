@@ -1,5 +1,10 @@
 package christmas.domain;
 
+/* ChristmasPromotion
+ * 프로그램의 로직기능을 담당한다.
+ * 입력에 대한 안내문구를 출력한다.
+ * */
+
 public class ChristmasPromotion {
     enum PromotionPhrases {
         GREETING_MESSAGE("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다."),
@@ -55,7 +60,7 @@ public class ChristmasPromotion {
         do {
             System.out.println(PromotionPhrases.GREETING_MESSAGE.getPhrase());
             System.out.println(PromotionPhrases.DATE_QUERY.getPhrase());
-            visitDate = userInputManager.checkVisitdate(userInputManager.input()); // 방문날짜 입력
+            visitDate = userInputManager.checkVisitdate(userInputManager.input()); // 방문날짜 입력, 예외처리
         } while (visitDate == 0);
 
         return visitDate;
@@ -67,7 +72,7 @@ public class ChristmasPromotion {
         do {
             System.out.println(PromotionPhrases.ORDER_MENU_PROMPT.getPhrase());
             order = userInputManager.input(); //  주문메뉴 입력
-            orderCheckStatus = userInputManager.checkOrder(order); //주문수량에 숫자가 아닌 잘못된 값이 있는지 확인
+            orderCheckStatus = userInputManager.checkOrder(order); //주문수량에 숫자가 아닌 잘못된 값 있는지 확인
             if (orderCheckStatus == true) {
                 orderManager.compileOrderList(order); // 메뉴 정리
                 orderManager.calculateOrderPrices(menuManager); // 가격 계산
