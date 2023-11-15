@@ -41,7 +41,6 @@ public class ChristmasPromotion {
 
         inputOrder();
 
-        orderManager.calculateOrderPrices(menuManager); // 가격 계산
         DayType dayType = eventCalendar.checkVisitDate(visitDate); //방문날짜에 해당되는 이벤트 확인
 
         if (orderManager.checkEventEligibility()) //총주문 금액이 이벤트 참여 조건에 만족하는지 확인
@@ -64,12 +63,16 @@ public class ChristmasPromotion {
 
     public void inputOrder() {
         String order = "";
+        boolean orderCheckStatus = true;
         do {
             System.out.println(PromotionPhrases.ORDER_MENU_PROMPT.getPhrase());
             order = userInputManager.input(); //  주문메뉴 입력
-        } while (!userInputManager.checkOrder(order));
-
-        orderManager.compileOrderList(order); // 메뉴 정리
-
+            orderCheckStatus = userInputManager.checkOrder(order); //주문수량에 숫자가 아닌 잘못된 값이 있는지 확인
+            if (orderCheckStatus == true) {
+                orderManager.compileOrderList(order); // 메뉴 정리
+                orderManager.calculateOrderPrices(menuManager); // 가격 계산
+                orderCheckStatus = menuManager.checkIfOnlyDrinks(); //음료만 주문했는지 확인
+            }
+        } while (!orderCheckStatus);
     }
 }

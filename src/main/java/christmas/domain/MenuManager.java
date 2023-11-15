@@ -75,6 +75,20 @@ public class MenuManager {
         return getAppetizerOrDessertPrice(menuName);
     }
 
+    public boolean checkIfOnlyDrinks() {
+        try {
+            if (appetizer == 0 && main == 0 && dessert == 0) {
+                throw new IllegalArgumentException(ErrorMessage.ERROR.getmessages());
+            }
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + ErrorMessage.ORDER.getmessages());
+            return false;
+        }
+
+        return true;
+    }
+
     public int getMainOrDrinkPrice(String menuName) {
         if (MAIN_MENU.containsKey(menuName)) {
             main++;
